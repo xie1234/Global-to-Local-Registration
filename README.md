@@ -1,1 +1,1 @@
-# Global-to-Local-Registration
+GTLReg: Iterative Global to Local Point Set Registration
