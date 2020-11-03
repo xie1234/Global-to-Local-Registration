@@ -47,3 +47,28 @@ def gtlReg(pc_src,pc_tgt):
     pc_res.point = xyz_src
     pc_res.normal = (resR @ pc_src.normal.T).T
     return trans,pc_res
+
+if __name__ == '__main__':
+    # demo for pair-wise registration
+    srcID,tgtID = 20,21   # 0 < ID < 250
+    data = np.load('data.npy',allow_pickle=True)
+    data1, data2 = data[srcID], data[tgtID]
+    # use PointCloud class
+    source = PointCloud(data1[:, :3], data1[:, 3:6], data1[:, 6:])
+    target = PointCloud(data2[:, :3], data2[:, 3:6], data2[:, 6:])
+
+
+    trans, source_temp = gtlReg(source, target)
+
+
+    # use Open3D to show result
+    pc_src = open3d.geometry.PointCloud()
+    pc_src.points = open3d.utility.Vector3dVector(source_temp.point)
+    pc_src.paint_uniform_color([1, 0.706, 0])
+
+    pc_tgt = open3d.geometry.PointCloud()
+    pc_tgt.points = open3d.utility.Vector3dVector(target.point)
+    pc_tgt.paint_uniform_color([0, 0.65, 0.929])
+
+    open3d.visualization.draw_geometries([pc_src,pc_tgt])
+
